@@ -2,6 +2,8 @@ require "../spec_helper"
 
 describe Docker::Container do
   before { WebMock.reset }
+  before { ENV["DOCKER_HOST"] = "tcp://localhost:80" }
+  after { ENV.delete("DOCKER_HOST") }
   subject { Docker::Container.from_json({"Id" => "test"}.to_json) }
 
   describe "#start" do
