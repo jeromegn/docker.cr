@@ -44,9 +44,5 @@ module Docker
       system_time: {key: "SystemTime", nilable: true, type: String},
       server_version: {key: "ServerVersion", nilable: true, type: String},
     })
-
-    def self.new
-      from_json Docker.client.get("/info").body
-    end
   end
 end

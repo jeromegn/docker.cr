@@ -1,9 +1,11 @@
 require "./spec_helper"
 
 describe Docker do
-  # TODO: Write tests
 
-  it "works" do
-    false.should eq(true)
+  describe ".client" do
+    it "is a Docker::Client" do
+      expect(Docker.client).to be_a(Docker::Client)
+    end
   end
+
 end

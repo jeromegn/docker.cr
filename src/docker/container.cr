@@ -15,29 +15,6 @@ module Docker
       size_root_fs: {key: "SizeRootFs", nilable: true, type: Int32},
       network_settings: {key: "NetworkSettings", nilable: true, type: Hash(String, JSON::Any)},
     })
-
-    def self.all(
-      all = false,
-      limit = nil : Int32?,
-      since = nil : String?,
-      before = nil : String?,
-      size = false,
-      filters = {} of String => Array(String)
-    )
-      params = HTTP::Params.build do |qs|
-        qs.add "all", all.to_s
-        qs.add "limit", limit.to_s
-        qs.add "since", since
-        qs.add "before", before
-        qs.add "size", size.to_s
-        qs.add "filters", filters.to_json
-      end
-      cs = [] of Container
-      JSON.parse(Docker.client.get("/containers/json?#{params}").body).each do |c|
-        cs << Container.from_json(c.to_json)
-      end
-      cs
-    end
   
     def logs(follow = true, stdout = true, stderr = true, since = 0, timestamps = false)
       params = HTTP::Params.build do |qs|
@@ -58,6 +35,32 @@ module Docker
           response.body_io.close
         end
       end
+    end
+
+    def start
+      handle_response Docker.client.post("/containers/#{id}/start")
+    end
+
+    def stop(wait = 5)
+      handle_response Docker.client.post("/containers/#{id}/stop?t=#{wait}")
+    end
+
+    def restart(wait = 5)
+      handle_response Docker.client.post("/containers/#{id}/restart?t=#{wait}")
+    end
+
+    def kill
+      handle_response Docker.client.post("/containers/#{id}/kill")
+    end
+
+    private def handle_response(res)
+      case res.status_code
+      when 404
+        raise Docker::Client::Exception.new("no such container")
+      when 500
+        raise Docker::Client::Exception.new("server error")
+      end
+      self
     end
 
   end

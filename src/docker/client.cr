@@ -1,16 +1,27 @@
 require "socket"
 require "uri"
 
+require "./client/*"
+
 module Docker
   class Client
+    include Docker::Client::Info
+    include Docker::Client::Containers
 
     delegate :get, :post, :put, :patch, :head, client
 
     DEFAULT_URL = "unix:///var/run/docker.sock"
     DEFAULT_CERT_PATH = "#{ENV["HOME"]}/.docker"
 
-    def initialize(url = ENV.fetch("DOCKER_URL", ENV.fetch("DOCKER_HOST", DEFAULT_URL)))
-      @url = URI.parse(url)
+    setter :verify_tls, :cert_path
+    getter :url
+
+    def initialize(@raw_url = ENV.fetch("DOCKER_URL", ENV.fetch("DOCKER_HOST", DEFAULT_URL)))
+      @url = URI.parse(@raw_url)
+    end
+
+    def url=(raw_url)
+      @url = URI.parse(raw_url)
     end
 
     def client
@@ -25,10 +36,6 @@ module Docker
       end
     end
 
-    def info
-      Docker::Info.from_json(client.get("/info").body)
-    end
-
     private def ssl_context
       @ssl_context ||= begin
         ctx = OpenSSL::SSL::Context.new(LibSSL.tlsv1_method)
@@ -40,7 +47,7 @@ module Docker
     end
 
     private def verify_tls?
-      tcp? && !!ENV.fetch("DOCKER_TLS_VERIFY", "0")
+      @verify_tls ||= tcp? && ENV.fetch("DOCKER_TLS_VERIFY", "0").to_i == 1
     end
 
     private def unix?
@@ -52,7 +59,7 @@ module Docker
     end
 
     private def cert_path
-      ENV.fetch("DOCKER_CERT_PATH", DEFAULT_CERT_PATH)
+      @cert_path ||= ENV.fetch("DOCKER_CERT_PATH", DEFAULT_CERT_PATH)
     end
 
     private def ca_file_path
