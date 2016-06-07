@@ -3,9 +3,9 @@ module Docker
     module Containers
 
       def containers(all = false,
-        limit = nil : Int32?,
-        since = nil : String?,
-        before = nil : String?,
+        limit : Int32 = nil,
+        since : String = nil,
+        before : String = nil,
         size = false,
         filters = {} of String => Array(String)
       )
