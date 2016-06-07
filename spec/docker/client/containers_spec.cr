@@ -11,7 +11,7 @@ describe Docker::Client::Containers do
       WebMock
         .stub(:get, "http://localhost:1337/containers/json")
         .with(query: {
-          all: false, limit: nil, since: nil, before: nil, size: false, filters: "{}"
+          "all": "false", "limit": "", "since": "", "before": "", "size": "false", "filters": "{}"
         })
         .to_return([
           { "Id" => "test1" },
