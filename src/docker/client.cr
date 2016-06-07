@@ -16,7 +16,7 @@ module Docker
     setter :verify_tls, :cert_path
     getter :url
 
-    def initialize(@raw_url = ENV.fetch("DOCKER_URL", ENV.fetch("DOCKER_HOST", DEFAULT_URL)))
+    def initialize(@raw_url : String = ENV.fetch("DOCKER_URL", ENV.fetch("DOCKER_HOST", DEFAULT_URL)))
       @url = URI.parse(@raw_url)
     end
 
