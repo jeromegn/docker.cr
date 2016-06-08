@@ -1,4 +1,5 @@
 class HTTP::Client
+  @socket : UNIXSocket | TCPSocket | OpenSSL::SSL::Socket | Nil
 
   def ssl_context=(ctx : OpenSSL::SSL::Context)
     self.socket = OpenSSL::SSL::Socket.new(tcp_socket, :client, ctx)

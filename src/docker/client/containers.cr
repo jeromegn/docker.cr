@@ -2,12 +2,13 @@ module Docker
   class Client
     module Containers
 
-      def containers(all = false,
-        limit = nil : Int32?,
-        since = nil : String?,
-        before = nil : String?,
-        size = false,
-        filters = {} of String => Array(String)
+      def containers(
+        all    : Bool    = false,
+        limit  : Int32?  = nil,
+        since  : String? = nil,
+        before : String? = nil,
+        size   : Bool    = false,
+        filters          = {} of String => Array(String)
       )
         params = HTTP::Params.build do |qs|
           qs.add "all", all.to_s

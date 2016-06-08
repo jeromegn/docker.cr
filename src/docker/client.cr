@@ -13,10 +13,13 @@ module Docker
     DEFAULT_URL = "unix:///var/run/docker.sock"
     DEFAULT_CERT_PATH = "#{ENV["HOME"]}/.docker"
 
-    setter :verify_tls, :cert_path
-    getter :url
+    getter url        : URI
+    setter verify_tls : Bool | Nil
+    setter cert_path  : String | Nil
 
-    def initialize(@raw_url = ENV.fetch("DOCKER_URL", ENV.fetch("DOCKER_HOST", DEFAULT_URL)))
+    @ssl_context : OpenSSL::SSL::Context | Nil
+
+    def initialize(@raw_url : String = ENV.fetch("DOCKER_URL", ENV.fetch("DOCKER_HOST", DEFAULT_URL)))
       @url = URI.parse(@raw_url)
     end
 
