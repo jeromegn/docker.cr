@@ -8,7 +8,7 @@ module Docker
     include Docker::Client::Info
     include Docker::Client::Containers
 
-    delegate :get, :post, :put, :patch, :head, client
+    delegate :get, :post, :put, :patch, :head, to: client
 
     DEFAULT_URL = "unix:///var/run/docker.sock"
     DEFAULT_CERT_PATH = "#{ENV["HOME"]}/.docker"
@@ -32,7 +32,7 @@ module Docker
         HTTP::Client.unix(@url.to_s.sub(/^unix:\/\//, ""))
       elsif verify_tls?
         c = HTTP::Client.new(@url.host.not_nil!, @url.port.not_nil!, true)
-        c.ssl_context = ssl_context
+        #c.ssl_context = ssl_context
         c
       else
         HTTP::Client.new(@url.host.not_nil!, @url.port.not_nil!, false)

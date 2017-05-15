@@ -12,8 +12,8 @@ class HTTP::Client
   end
 
   def socket
-    @socket ||= if @ssl
-      @ssl_socket ||= OpenSSL::SSL::Socket.new(tcp_socket)
+    @socket ||= if @tls
+      @ssl_socket ||= OpenSSL::SSL::Socket::Client.new(tcp_socket)
     else
       tcp_socket
     end
