@@ -1,8 +1,10 @@
 class HTTP::Client
-  @socket : UNIXSocket | TCPSocket | OpenSSL::SSL::Socket | Nil
+  include OpenSSL
 
-  def ssl_context=(ctx : OpenSSL::SSL::Context)
-    self.socket = OpenSSL::SSL::Socket.new(tcp_socket, :client, ctx)
+  @socket : UNIXSocket | TCPSocket | SSL::Socket | Nil
+
+  def ssl_context=(ctx : SSL::Context)
+    self.socket = SSL::Socket::Client.new(tcp_socket, ctx.as(SSL::Context::Client))
   end
 
   def self.unix(path)
@@ -13,7 +15,7 @@ class HTTP::Client
 
   def socket
     @socket ||= if @tls
-      @ssl_socket ||= OpenSSL::SSL::Socket::Client.new(tcp_socket)
+      @ssl_socket ||= SSL::Socket::Client.new(tcp_socket)
     else
       tcp_socket
     end

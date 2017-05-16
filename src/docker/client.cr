@@ -32,7 +32,7 @@ module Docker
         HTTP::Client.unix(@url.to_s.sub(/^unix:\/\//, ""))
       elsif verify_tls?
         c = HTTP::Client.new(@url.host.not_nil!, @url.port.not_nil!, true)
-        #c.ssl_context = ssl_context
+        c.ssl_context = ssl_context
         c
       else
         HTTP::Client.new(@url.host.not_nil!, @url.port.not_nil!, false)
@@ -41,7 +41,7 @@ module Docker
 
     private def ssl_context
       @ssl_context ||= begin
-        ctx = OpenSSL::SSL::Context.new(LibSSL.tlsv1_method)
+        ctx = OpenSSL::SSL::Context::Client.new(LibSSL.tlsv1_method)
         ctx.private_key = key_file_path
         ctx.ca_file = ca_file_path
         ctx.certificate_file = cert_file_path
