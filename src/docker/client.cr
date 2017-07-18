@@ -8,7 +8,7 @@ module Docker
     include Docker::Client::Info
     include Docker::Client::Containers
 
-    delegate :get, :post, :put, :patch, :head, client
+    delegate :get, :post, :put, :patch, :head, to: client
 
     DEFAULT_URL = "unix:///var/run/docker.sock"
     DEFAULT_CERT_PATH = "#{ENV["HOME"]}/.docker"
@@ -41,7 +41,7 @@ module Docker
 
     private def ssl_context
       @ssl_context ||= begin
-        ctx = OpenSSL::SSL::Context.new(LibSSL.tlsv1_method)
+        ctx = OpenSSL::SSL::Context::Client.new(LibSSL.tlsv1_method)
         ctx.private_key = key_file_path
         ctx.ca_file = ca_file_path
         ctx.certificate_file = cert_file_path
