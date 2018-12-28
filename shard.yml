@@ -13,3 +13,5 @@ development_dependencies:
   spec2:
     github: waterlink/spec2.cr
     branch: master
+
+crystal: 0.27.0

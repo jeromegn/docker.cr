@@ -19,7 +19,7 @@ module Docker
           qs.add "filters", filters.to_json
         end
         cs = [] of Container
-        JSON.parse(Docker.client.get("/containers/json?#{params}").body).each do |c|
+        JSON.parse(Docker.client.get("/containers/json?#{params}").body).as_a.each do |c|
           cs << Container.from_json(c.to_json)
         end
         cs
