@@ -1,6 +1,4 @@
-# Docker [![Build Status](https://travis-ci.org/jeromegn/docker.cr.svg?branch=master)](https://travis-ci.org/jeromegn/docker.cr) [![Dependency Status](https://shards.rocks/badge/github/jeromegn/docker.cr/status.svg)](https://shards.rocks/github/jeromegn/docker.cr) [![devDependency Status](https://shards.rocks/badge/github/jeromegn/docker.cr/dev_status.svg)](https://shards.rocks/github/jeromegn/docker.cr)
-
-Docker API client in Crystal.
+# Crystal Docker API client
 
 ## Installation
 
