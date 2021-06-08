@@ -1,3 +1,5 @@
+require "json_mapping"
+
 module Docker
   class Container
 

@@ -1,13 +1,13 @@
 require "../../spec_helper"
 
 describe Docker::Client::Containers do
-  before { WebMock.reset }
+  before_all { WebMock.reset }
 
-  before { ENV["DOCKER_HOST"] = "tcp://localhost:1337" }
-  after { ENV.delete "DOCKER_HOST" }
+  before_all { ENV["DOCKER_HOST"] = "tcp://localhost:1337" }
+  after_all { ENV.delete "DOCKER_HOST" }
 
   describe ".containers" do
-    before do
+    before_all do
       WebMock
         .stub(:get, "http://localhost:1337/containers/json")
         .with(query: {
@@ -19,9 +19,9 @@ describe Docker::Client::Containers do
         ].to_json)
     end
 
-    subject { Docker.client.containers }
     it "is a Array(Docker::Container)" do
-      expect(subject).to be_a(Array(Docker::Container))
+      containers = Docker.client.containers
+      containers.should be_a(Array(Docker::Container))
     end
   end
 end

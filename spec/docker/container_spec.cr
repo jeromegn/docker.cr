@@ -1,10 +1,9 @@
 require "../spec_helper"
 
 describe Docker::Container do
-  before { WebMock.reset }
-  before { ENV["DOCKER_HOST"] = "tcp://localhost:80" }
-  after { ENV.delete("DOCKER_HOST") }
-  subject { Docker::Container.from_json({"Id" => "test"}.to_json) }
+  before_all { WebMock.reset }
+  before_all { ENV["DOCKER_HOST"] = "tcp://localhost:80" }
+  after_all { ENV.delete("DOCKER_HOST") }
 
   describe "#start" do
 
@@ -29,20 +28,26 @@ describe Docker::Container do
     # end
 
     context "not found" do
-      before do
+      before_all do
         WebMock.stub(:post, "localhost/containers/test/start").to_return(status: 404)
       end
       it "raises error" do
-        expect { subject.start }.to raise_error(Docker::Client::Exception)
+        container = Docker::Container.from_json({"Id" => "test"}.to_json)
+        expect_raises(Docker::Client::Exception) do
+          container.start
+        end
       end
     end
 
     context "server error" do
-      before do
+      before_all do
         WebMock.stub(:post, "localhost/containers/test/start").to_return(status: 500)
       end
       it "raises error" do
-        expect { subject.start }.to raise_error(Docker::Client::Exception)
+        container = Docker::Container.from_json({"Id" => "test"}.to_json)
+        expect_raises(Docker::Client::Exception) do
+          container.start
+        end
       end
     end
 
@@ -71,20 +76,26 @@ describe Docker::Container do
     # end
 
     context "not found" do
-      before do
+      before_all do
         WebMock.stub(:post, "localhost/containers/test/stop?t=5").to_return(status: 404)
       end
       it "raises error" do
-        expect { subject.stop }.to raise_error(Docker::Client::Exception)
+        container = Docker::Container.from_json({"Id" => "test"}.to_json)
+        expect_raises(Docker::Client::Exception) do
+          container.stop
+        end
       end
     end
 
     context "server error" do
-      before do
+      before_all do
         WebMock.stub(:post, "localhost/containers/test/stop?t=5").to_return(status: 500)
       end
       it "raises error" do
-        expect { subject.stop }.to raise_error(Docker::Client::Exception)
+        container = Docker::Container.from_json({"Id" => "test"}.to_json)
+        expect_raises(Docker::Client::Exception) do
+          container.stop
+        end
       end
     end
   end
@@ -112,20 +123,26 @@ describe Docker::Container do
     # end
 
     context "not found" do
-      before do
+      before_all do
         WebMock.stub(:post, "localhost/containers/test/restart?t=5").to_return(status: 404)
       end
       it "raises error" do
-        expect { subject.restart }.to raise_error(Docker::Client::Exception)
+        container = Docker::Container.from_json({"Id" => "test"}.to_json)
+        expect_raises(Docker::Client::Exception) do
+          container.restart
+        end
       end
     end
 
     context "server error" do
-      before do
+      before_all do
         WebMock.stub(:post, "localhost/containers/test/restart?t=5").to_return(status: 500)
       end
       it "raises error" do
-        expect { subject.restart }.to raise_error(Docker::Client::Exception)
+        container = Docker::Container.from_json({"Id" => "test"}.to_json)
+        expect_raises(Docker::Client::Exception) do
+          container.restart
+        end
       end
     end
   end
@@ -153,20 +170,26 @@ describe Docker::Container do
     # end
 
     context "not found" do
-      before do
+      before_all do
         WebMock.stub(:post, "localhost/containers/test/kill").to_return(status: 404)
       end
       it "raises error" do
-        expect { subject.kill }.to raise_error(Docker::Client::Exception)
+        container = Docker::Container.from_json({"Id" => "test"}.to_json)
+        expect_raises(Docker::Client::Exception) do
+          container.kill
+        end
       end
     end
 
     context "server error" do
-      before do
+      before_all do
         WebMock.stub(:post, "localhost/containers/test/kill").to_return(status: 500)
       end
       it "raises error" do
-        expect { subject.kill }.to raise_error(Docker::Client::Exception)
+        container = Docker::Container.from_json({"Id" => "test"}.to_json)
+        expect_raises(Docker::Client::Exception) do
+          container.kill
+        end
       end
     end
 
