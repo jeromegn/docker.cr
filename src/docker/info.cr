@@ -27,7 +27,7 @@ module Docker
       init_sha1: {key: "InitSha1", nilable: true, type: String},
       kernel_version: {key: "KernelVersion", nilable: true, type: String},
       labels: {key: "Labels", nilable: true, type: Array(String)},
-      mem_total: {key: "MemTotal", nilable: true, type: Int32},
+      mem_total: {key: "MemTotal", nilable: true, type: Int64},
       memory_limit: {key: "MemoryLimit", nilable: true, type: Bool},
       ncpu: {key: "NCPU", nilable: true, type: Int32},
       n_events_listener: {key: "NEventsListener", nilable: true, type: Int32},
