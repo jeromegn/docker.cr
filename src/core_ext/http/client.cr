@@ -8,8 +8,7 @@ class HTTP::Client
   end
 
   def self.unix(path)
-    client = new("localhost")
-    client.socket = UNIXSocket.new(path)
+    client = new UNIXSocket.new(path)
     client
   end
 

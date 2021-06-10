@@ -5,26 +5,26 @@ describe Docker::Client do
   describe ".new" do
 
     context "defaults" do
-      subject { Docker::Client.new }
       it "uses unix" do 
-        expect(subject.url.to_s).to eq("unix:///var/run/docker.sock")
+        client = Docker::Client.new
+        client.url.to_s.should eq("unix:///var/run/docker.sock")
       end
     end
 
     context "env vars" do
-      before { ENV["DOCKER_HOST"] = "tcp://0.0.0.0:8000" }
-      after { ENV.delete("DOCKER_HOST") }
-      subject { Docker::Client.new }
+      before_all { ENV["DOCKER_HOST"] = "tcp://0.0.0.0:8000" }
+      after_all { ENV.delete("DOCKER_HOST") }
       it "applies environment" do 
-        expect(subject.url.to_s).to eq("tcp://0.0.0.0:8000")
+        client = Docker::Client.new
+        client.url.to_s.should eq("tcp://0.0.0.0:8000")
       end
     end
 
     context "manual setting" do
-      subject { Docker::Client.new }
-      before { subject.url = "tcp://0.0.0.0:8001" }
       it "applies custom setting" do 
-        expect(subject.url.to_s).to eq("tcp://0.0.0.0:8001")
+        client = Docker::Client.new
+        client.url = "tcp://0.0.0.0:8001"
+        client.url.to_s.should eq("tcp://0.0.0.0:8001")
       end
     end
 
